@@ -6,13 +6,17 @@ pipeline{
          jdk '1'
     }
 
-    stages{
-        stage('checkout'){
-            steps{
-                checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'github access', url: 'https://github.com/sreenivas449/java-hello-world-with-maven.git']]])
+    stages {
+        stage('checkout') {
+            steps {
+                checkout([$class: 'GitSCM', 
+                    branches: [[name: '*/master']], 
+                    extensions: [], 
+                    userRemoteConfigs: [[credentialsId: 'github access', url: 'https://github.com/gokutou/deneme1.git']]
+                ])
             }
         }
-        stage('get_version'){
+        stage('get_version') {
             steps {
                 script {
                     def version = sh(script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true).trim()
@@ -21,11 +25,11 @@ pipeline{
                     echo "Project Version: ${version}"
                     echo "Artifact ID: ${artifactId}"
                 }
-
+            }
         }
-        stage('build'){
-            steps{
-               bat 'mvn package'
+        stage('build') {
+            steps {
+                sh 'mvn package'  // Use 'sh' instead of 'bat' for Linux
             }
         }
     }
