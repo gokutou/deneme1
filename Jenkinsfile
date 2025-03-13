@@ -2,8 +2,8 @@ pipeline{
     agent any
 
     tools {
-         maven 'maven'
-         jdk 'java'
+         maven '1'
+         jdk '1'
     }
 
     stages{
@@ -13,12 +13,15 @@ pipeline{
             }
         }
         stage('get_version'){
-            steps{
-                def version = sh script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true
-                def artifactId = sh script: 'mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout', returnStdout: true
-                echo "Project Version: ${version}"
-                echo "Artifact ID: ${artifactId}"
-            }
+            steps {
+                script {
+                    def version = sh(script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true).trim()
+                    def artifactId = sh(script: 'mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout', returnStdout: true).trim()
+
+                    echo "Project Version: ${version}"
+                    echo "Artifact ID: ${artifactId}"
+                }
+
         }
         stage('build'){
             steps{
