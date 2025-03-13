@@ -16,6 +16,8 @@ pipeline{
             steps{
                 def version = sh script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true
                 def artifactId = sh script: 'mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout', returnStdout: true
+                echo "Project Version: ${version}"
+                echo "Artifact ID: ${artifactId}"
             }
         }
         stage('build'){
